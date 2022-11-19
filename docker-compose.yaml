@@ -1,0 +1,56 @@
+version: '3.4'
+
+services:
+  rabbitMQ:
+    container_name: RabbitMQ
+    image: rabbitmq:3.10-rc-management-alpine
+    ports:
+      # AMQP protocol port
+      - "5672:5672"
+      # HTTP management UI
+      - "15672:15672"
+
+  database:
+    container_name: mongodb
+    image: mongo
+    ports: [ "27017:27017" ]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "1234"
+
+  createbook:
+    build: createbook
+    container_name: createbook
+    restart: unless-stopped
+    ports: [ "8080:8080" ]
+    volumes:
+      - ./createbook:/app:cached,ro
+      - ./createbook/src:/app/src:cached,ro
+    environment:
+      PORT: "8080"
+    env_file: [ ./createbook/.env ]
+    depends_on: [ "database" ]
+
+  listbooks:
+    build: listbooks
+    container_name: listbooks
+    restart: unless-stopped
+    ports: [ "9090:9090" ]
+    volumes:
+      - ./listbooks:/app:cached,ro
+      - ./listbooks/src:/app/src:cached,ro
+    environment:
+      PORT: "9090"
+    env_file: [ ./listbooks/.env ]
+    depends_on: [ "database" ]
+
+  frontend:
+    build: frontend
+    container_name: frontend
+    ports: [ "3000:3000" ]
+    tty: true
+    volumes:
+      - ./frontend:/frontend
+      - ./frontend/public:/frontend/public:cached,ro
+      - ./frontend/src:/frontend/src:cached,ro
+    depends_on: [ "listbooks" ]
