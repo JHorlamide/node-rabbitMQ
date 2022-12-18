@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["createbook", "listbook", "RABBITMQ"]
+  "cSpell.words": ["createbook", "listbook", "RABBITMQ"],
+  "terminal.integrated.tabs.defaultColor": "terminal.ansiBlack"
 }

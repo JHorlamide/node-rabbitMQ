@@ -1,34 +1,22 @@
 import express from "express";
-import amqp from "amqplib";
-import dotenv from "dotenv";
 import Books from "./book.model.js";
-
-dotenv.config();
+import { publisher } from "./producer.js";
 
 const router = express.Router();
-let channel;
-
-export async function rabbitMQConnect() {
-  const amqpServer = process.env.RABBITMQ_URL;
-  try {
-    const connection = await amqp.connect(amqpServer);
-    channel = await connection.createChannel();
-    await channel.assertQueue("CREATE_BOOK");
-  } catch (error) {
-    console.error("RabbitMQ Error: ", error);
-  }
-}
 
 router.post("/api/books", async (req, res) => {
-  channel.sendToQueue(
-    "LIST_BOOK",
-    Buffer.from(JSON.stringify({ book: req.body }))
-  );
+  try {
+    publisher("", "books", Buffer.from(JSON.stringify({ book: req.body })));
 
-  const book = new Books({ ...req.body });
-  await book.save();
-
-  res.status(201).json({ status: true, data: book });
+    const book = await Books.create({ ...req.body });
+    res.status(201).json({ status: true, data: book });
+  } catch (error) {
+    console.error("Error: ", error.message);
+    res.status(400).json({
+      status: false,
+      message: "Could not create book ",
+    });
+  }
 });
 
 export default router;

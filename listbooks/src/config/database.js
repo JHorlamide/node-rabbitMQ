@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 
+let count = 0;
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://root:1234@database:27017/");
-    console.log("listBook: connected to database...");
+    await mongoose.connect("mongodb://root:1234@mongodb:27017/");
+    console.log("Database connected successfully...");
   } catch (error) {
-    console.error("Mongoose error message: ", error.message);
+    console.log(
+      `MongoDB connection unsuccessful, retry after 5 seconds. ${++count}`
+    );
+
+    setTimeout(connectDB, 5000);
   }
 };
 

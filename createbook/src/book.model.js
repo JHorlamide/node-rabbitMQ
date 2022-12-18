@@ -1,30 +1,34 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+import { DataTypes } from "sequelize";
+import sequelize from "./config/database.js";
 
-const bookSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-
-    authorName: {
-      type: String,
-      required: true,
-    },
-
-    description: {
-      type: String,
-      required: true,
-    },
-
-    category: {
-      type: String,
-      required: true,
-    },
+const Books = sequelize.define("Book", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
   },
-  { timestamps: true }
-);
 
-const Books = mongoose.model("Books", bookSchema);
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  authorName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
 
 export default Books;

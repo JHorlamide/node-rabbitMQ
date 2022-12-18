@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./src/config/database.js";
-import listBookRoute, { rabbitMQConnect } from "./src/listbook.route.js";
+import listBookRoute from "./src/listbook.route.js";
+import rabbitMQConnect from "./src/consumer.js";
 
 dotenv.config();
 

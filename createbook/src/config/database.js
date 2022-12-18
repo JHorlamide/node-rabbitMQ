@@ -1,12 +1,15 @@
-import mongoose from "mongoose";
+import Sequelize from "sequelize";
+import { config } from "./config.js";
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect("mongodb://root:1234@database:27017/");
-    console.log("createBook: connected to database...");
-  } catch (error) {
-    console.error("Mongoose error message: ", error.message);
-  }
-};
+const sequelize = new Sequelize(
+  "mysql://root:password@mysql_server:3306/node_rabbitmq"
+);
 
-export default connectDB;
+try {
+  sequelize.authenticate();
+  console.log("Database connected successfully");
+} catch (error) {
+  console.log("Unable to connect to database: " + error.message);
+}
+
+export default sequelize;
