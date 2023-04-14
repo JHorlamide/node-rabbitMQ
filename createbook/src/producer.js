@@ -33,7 +33,7 @@ const rabbitMQConnect = async () => {
   } catch (error) {
     const retrySeconds = 5;
     console.log(
-      `Connection RabbitMQ failed, (will retry in #${retryCount} after ${retrySeconds} seconds: `,
+      `Connection RabbitMQ failed, (will retry in #${++retryCount} after ${retrySeconds} seconds: `,
       error
     );
 
@@ -78,7 +78,7 @@ async function startPublisher() {
 // method to publish a message,
 // will queue messages internally
 // if the connection is down and resend later
-export function publisher(exchange, routingKey, content) {
+export async function publisher(exchange, routingKey, content) {
   try {
     publisherChannel.publish(
       exchange,

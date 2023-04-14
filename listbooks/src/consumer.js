@@ -7,7 +7,6 @@ let amqpConnection = null;
 let retryCount = 0;
 
 const createBook = async (book) => {
-  console.log("CreateBook: ", book);
   const newBook = new Book({ ...book });
   await newBook.save();
 };
@@ -35,7 +34,7 @@ async function rabbitMQConnect() {
   } catch (error) {
     const retrySeconds = 5;
     console.log(
-      `Connection RabbitMQ failed, (will retry in #${retryCount} after ${retrySeconds} seconds: `,
+      `Connection RabbitMQ failed, (will retry in #${++retryCount} after ${retrySeconds} seconds: `,
       error
     );
 

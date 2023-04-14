@@ -1,5 +1,4 @@
 import Sequelize from "sequelize";
-import { config } from "./config.js";
 
 const sequelize = new Sequelize(
   "mysql://root:password@mysql_server:3306/node_rabbitmq"

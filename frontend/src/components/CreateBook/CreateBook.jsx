@@ -21,6 +21,7 @@ const CreateBook = ({ setBooks }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     const emptyFields = Object.keys(formData).some((field) => {
       return !formData[field];
     });
@@ -34,6 +35,7 @@ const CreateBook = ({ setBooks }) => {
       .then((book) => {
         console.log("Book was created: ", book);
         setBooks((prevBook) => [book, ...prevBook]);
+        clearFormInput();
       })
       .catch((error) => {
         setError(error.toString());
@@ -48,13 +50,22 @@ const CreateBook = ({ setBooks }) => {
     }
   };
 
+  const clearFormInput = () => {
+    setFormData({
+      name: "",
+      authorName: "",
+      description: "",
+      category: "",
+    });
+  }
+
   return (
-    <div className="container mx-auto bg-gray-100 rounded-xl py-8 px-6">
-      <h1 className="text-gray-500 font-bold text-xl pb-6">Create New Book</h1>
+    <div className="container px-6 py-8 mx-auto bg-gray-100 rounded-xl">
+      <h1 className="pb-6 text-xl font-bold text-gray-500">Create New Book</h1>
 
       <form className="flex flex-col space-y-5" onSubmit={handleSubmit}>
         {error && (
-          <h3 className="text-red-500 text-md text-center font-semibold">
+          <h3 className="font-semibold text-center text-red-500 text-md">
             {error}
           </h3>
         )}
@@ -63,7 +74,7 @@ const CreateBook = ({ setBooks }) => {
         <div className="flex justify-center space-x-4">
           <CustomInput
             id=""
-            className="text-xs w-full px-4 py-4 rounded-full bg-transparent border-2 border-gray-500"
+            className="w-full px-4 py-4 text-xs bg-transparent border-2 border-gray-500 rounded-full"
             inputProps={{
               type: "text",
               name: "name",
@@ -75,7 +86,7 @@ const CreateBook = ({ setBooks }) => {
 
           <CustomInput
             id=""
-            className="text-xs w-full px-4 py-4 rounded-full bg-transparent border-2 border-gray-500"
+            className="w-full px-4 py-4 text-xs bg-transparent border-2 border-gray-500 rounded-full"
             inputProps={{
               type: "text",
               name: "authorName",
@@ -90,7 +101,7 @@ const CreateBook = ({ setBooks }) => {
         <div className="flex justify-center space-x-4">
           <CustomInput
             id=""
-            className="text-xs w-full px-4 py-4 rounded-full bg-transparent border-2 border-gray-500"
+            className="w-full px-4 py-4 text-xs bg-transparent border-2 border-gray-500 rounded-full"
             inputProps={{
               type: "text",
               name: "description",
@@ -102,7 +113,7 @@ const CreateBook = ({ setBooks }) => {
 
           <CustomInput
             id=""
-            className="text-xs w-full px-4 py-4 rounded-full bg-transparent border-2 border-gray-500"
+            className="w-full px-4 py-4 text-xs bg-transparent border-2 border-gray-500 rounded-full"
             inputProps={{
               type: "text",
               name: "category",
@@ -114,8 +125,7 @@ const CreateBook = ({ setBooks }) => {
         </div>
 
         <CustomBtn
-          className="py-3 bg-black text-center text-white font-semibold
-          w-full rounded-full"
+          className="w-full py-3 font-semibold text-center text-white bg-black rounded-full"
           type="submit"
           onClick={handleSubmit}
           onKeyPress={handlePress}
